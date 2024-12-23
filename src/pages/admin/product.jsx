@@ -3,6 +3,8 @@ import Sidebar from '../../components/admin/sidebar';
 import { Pencil, Save, Search, ArrowUpDown } from 'lucide-react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { FaTrashCan } from "react-icons/fa6";
 
 const Product = () => {
   const { sellerId } = useParams();
@@ -29,6 +31,7 @@ const Product = () => {
         navigate('/seller/login');
         return;
       }
+
 
       try {
         const response = await fetch('http://localhost:5000/admin/verify-seller', {
@@ -103,6 +106,25 @@ const Product = () => {
       console.error('Error updating stock values:', error);
     }
   };
+
+  const handleDelete = async (productKey) => {
+    try {
+      console.log(productKey);
+      const res = await axios.post('http://localhost:5000/delete-product', {productKey:productKey});
+      if(res){
+        if(res.data.success === true){ 
+          alert("Product Deleted");
+          setProducts(prev => prev.filter(prod => prod.productId !==productKey));
+        }
+        else {
+          alert("Some issue in deleting!");
+        }
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleSort = (key) => {
     let direction = 'ascending';
@@ -273,12 +295,21 @@ const Product = () => {
                         <Save size={18} />
                       </button>
                     ) : (
-                      <button
-                        onClick={() => handleEdit(product)}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        <Pencil size={18} />
-                      </button>
+                      <div className='flex w-full justify-start gap-6'>
+                        <button
+                          onClick={() => handleEdit(product)}
+                          className="text-blue-600 rounded-lg w-full px-2 py-1 hover:bg-slate-200"
+                        >
+                          <Pencil size={18} />
+                        </button>
+                        <button
+                          className='w-full rounded-lg px-2 py-1 hover:bg-slate-200'
+                          onClick={()=> handleDelete(product.productId)}
+                        >
+                            <FaTrashCan className='text-red-600 w-4 h-4 ' />
+                        </button>
+
+                      </div>
                     )}
                   </td>
                 </tr>
