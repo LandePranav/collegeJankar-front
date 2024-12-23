@@ -7,7 +7,6 @@ import {
     Package, 
     CheckCircle, 
     XCircle 
-    
 } from 'lucide-react';
 import { FaRupeeSign } from 'react-icons/fa';
 
@@ -23,7 +22,7 @@ const Dashboard = () => {
             const response = await fetch(
                 // "https://ecommercebackend-8gx8.onrender.com/get-orders"
 
-                "https://localhost:5000/get-orders"
+                "http://localhost:5000/get-orders"
                 );
             if (!response.ok) {
                 throw new Error('Failed to fetch orders');

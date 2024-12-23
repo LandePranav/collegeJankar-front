@@ -16,7 +16,9 @@ const Product = () => {
     category: '',
     price: '',
     inStockValue: '',
-    soldStockValue: ''
+    soldStockValue: '',
+    description: '',
+
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -77,7 +79,8 @@ const Product = () => {
       category: product.category || '',
       price: product.price || 0,
       inStockValue: product.inStockValue || 0,
-      soldStockValue: product.soldStockValue || 0
+      soldStockValue: product.soldStockValue || 0,
+      description: product?.description || "",
     });
   };
 
@@ -94,7 +97,8 @@ const Product = () => {
           category: editValues.category || '',
           price: editValues.price || 0,
           inStockValue: editValues.inStockValue || 0,
-          soldStockValue: editValues.soldStockValue || 0
+          soldStockValue: editValues.soldStockValue || 0,
+          description: editValues.description ||  ""
         })
       });
 
@@ -225,7 +229,8 @@ const Product = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.map((product) => (
-                <tr key={product.productId}>
+                <React.Fragment key={product.productId}>
+                  <tr key={product.productId} className={`${editingId === product.productId ? " border-b-0": ""}`} >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {editingId === product.productId ? (
                       <input
@@ -308,11 +313,24 @@ const Product = () => {
                         >
                             <FaTrashCan className='text-red-600 w-4 h-4 ' />
                         </button>
-
                       </div>
                     )}
                   </td>
-                </tr>
+                  </tr>
+                  {editingId === product.productId && (
+                    <tr className='border-t-0'>
+                      <td colSpan="5" className="px-6 py-4 text-sm text-gray-500">
+                        <textarea
+                          className="w-full border rounded px-2 py-1"
+                          rows="3"
+                          placeholder="Enter product description"
+                          value={editValues.description || ''}
+                          onChange={(e) => setEditValues({ ...editValues, description: e.target.value })}
+                        />
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
