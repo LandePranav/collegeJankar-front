@@ -5,7 +5,8 @@ import confetti from 'canvas-confetti';
 import { Helmet } from "react-helmet";
 import Navbar from '../../components/user/navbar/navbar';
 import { useLocation } from 'react-router-dom';
-
+import { createOrder, getShippingRates } from "../../components/shiprocketService.js"
+; // Adjust the path as needed
 const Checkout = () => {
   const location = useLocation()
   const total = parseFloat(location.state?.total || 0)
@@ -141,38 +142,78 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     const userId = sessionStorage.getItem('userId');
-
+  
+    if (!isAddressValid()) {
+      alert('Please fill in all address fields.');
+      return;
+    }
+  
+    // Step 1: Save address if "saveAddress" is checked
     if (saveAddress) {
       try {
         await fetch('https://ecommercebackend-8gx8.onrender.com/update-address', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             userId,
-            address: Object.values(address).join(', ')
-          })
+            address: Object.values(address).join(', '),
+          }),
         });
       } catch (err) {
         console.error('Error saving address:', err);
       }
     }
-
-    const now = new Date();
-    const date = now.toLocaleDateString('en-GB');
-    const time = now.toLocaleTimeString('en-GB');
-
-    const productsOrdered = cartItems.map(item => ({
-      productId: item.productId,
-      productQty: item.quantity
-    }));
-
+  
+    // Step 2: Prepare order data for Shiprocket
+    const orderData = {
+      order_id: `${userId}_${Date.now()}`, // Unique order ID
+      order_date: new Date().toISOString(),
+      pickup_location: 'Primary',
+      channel_id: '',
+      comment: 'Order placed',
+      billing_customer_name: address.street,
+      billing_last_name: '',
+      billing_address: address.street,
+      billing_city: address.city,
+      billing_pincode: address.pincode,
+      billing_state: address.state,
+      billing_country: 'India', // Assuming India for now
+      billing_email: 'user@example.com', // Replace with actual user email
+      billing_phone: address.phone,
+      shipping_is_billing: true,
+      order_items: cartItems.map((item) => ({
+        name: item.name,
+        sku: item.productId,
+        units: item.quantity,
+        selling_price: parseFloat(item.price.replace(/[^\d.]/g, '')),
+      })),
+    };
+  
     try {
+      // Step 3: Create order in Shiprocket
+      const shiprocketResponse = await createOrder(orderData);
+      console.log('Shiprocket Order Response:', shiprocketResponse);
+  
+      // Step 4: Fetch shipping rates
+      const shippingRatesResponse = await getShippingRates(shiprocketResponse.order_id);
+      console.log('Shipping Rates:', shippingRatesResponse);
+  
+      // Step 5: Save order details in your backend
+      const now = new Date();
+      const date = now.toLocaleDateString('en-GB');
+      const time = now.toLocaleTimeString('en-GB');
+  
+      const productsOrdered = cartItems.map((item) => ({
+        productId: item.productId,
+        productQty: item.quantity,
+      }));
+  
       const response = await fetch('https://ecommercebackend-8gx8.onrender.com/cart/place-order', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userId,
@@ -180,19 +221,20 @@ const Checkout = () => {
           time,
           address: Object.values(address).join(', '),
           price: total,
-          productsOrdered
-        })
+          productsOrdered,
+          shiprocketOrderId: shiprocketResponse.order_id, // Save Shiprocket order ID
+        }),
       });
-
+  
       const data = await response.json();
-      
+  
       if (data.message === 'Order placed successfully') {
         confetti({
           particleCount: 100,
           spread: 70,
-          origin: { y: 0.6 }
+          origin: { y: 0.6 },
         });
-
+  
         setShowSuccess(true);
         setTimeout(() => {
           navigate('/cart');
@@ -200,6 +242,7 @@ const Checkout = () => {
       }
     } catch (err) {
       console.error('Error placing order:', err);
+      alert('Failed to place order. Please try again.');
     }
   };
 
