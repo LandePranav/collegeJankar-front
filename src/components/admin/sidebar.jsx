@@ -58,9 +58,8 @@ const Sidebar = () => {
     };
 
     const handleImageUpload = (e) => {
-        const files = e.target?.files;
-        
-        setImages([...files]);
+        const files = Array.from(e.target?.files);
+        setImages(files);
         // setImages((prevImages) => [...prevImages, ...files].slice(0, 5)); // Keep only the first 5
     };
 
@@ -95,28 +94,28 @@ const Sidebar = () => {
 
     const handleSubmit = async () => {
         try{
-            let imageText = "";
-            images.forEach((image)=> {
-            let reader  = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onload = () => {
-                imageText += reader.result + " ";
-            }
-            });
-            setProductData(prev => ({...prev,img:imageText}));
-
-            console.log(productData);
+            const imageTexts = await Promise.all(
+                images.map((image)=> {
+                    return new Promise ((resolve, reject) => {
+                        const reader = new FileReader();
+                    reader.readAsDataURL(image);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = (error) => reject(error);
+                    })
+                })
+            )
+            const imageText = imageTexts.join(' ');
+            const updatedProductData = {...productData, img:imageText};
             const response = await fetch('http://localhost:5000/create-product', {
                 method: 'POST',
-                // headers: {
-                //     'Content-Type': 'application/json',
-                // },
-                body: JSON.stringify(productData)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({productData: updatedProductData})
             });
             if(response.ok) {
                 setShowDialog(false);
                 setImages([]);
-                imageText='';
                 setProductData({
                     name: '',
                     price: '',
@@ -170,6 +169,16 @@ const Sidebar = () => {
                             onChange={handleImageUpload}
                             className="w-full mb-3 p-2 border rounded"
                         />
+                        <div className="mb-3 flex gap-1 flex-wrap">
+                        {images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={URL.createObjectURL(image)}
+                                    alt={`preview-${index}`}
+                                    className="w-20 h-20 object-cover rounded-lg mr-2"
+                                />
+                                ))}
+                            </div>
                         <input
                             type="text"
                             name="category"
