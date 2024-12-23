@@ -45,7 +45,7 @@ const AdminSignup = () => {
     }
 
     try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/seller/signup', {
+      const response = await fetch('http://localhost:5000/admin/seller/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ const AdminSignup = () => {
   const handleVerificationMethodSelect = async (method) => {
     setVerificationMethod(method);
     try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/seller/send-otp', {
+      const response = await fetch('http:localhost:5000/seller/send-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ const AdminSignup = () => {
     if (resendDisabled) return;
     
     try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/seller/send-otp', {
+      const response = await fetch('http://localhost:5000/seller/send-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ const AdminSignup = () => {
     }
 
     try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/seller/verify-otp', {
+      const response = await fetch('http://localhost:5000/seller/verify-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -238,7 +238,6 @@ const AdminSignup = () => {
                         onChange={(e) => setEmailId(e.target.value)}
                       />
                     </div>
-
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Lock className="text-pink-400 w-4 h-4 sm:w-5 sm:h-5" />

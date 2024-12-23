@@ -230,7 +230,7 @@ const Product = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.map((product) => (
                 <React.Fragment key={product.productId}>
-                  <tr key={product.productId} className={`${editingId === product.productId ? " border-b-0": ""}`} >
+                  <tr key={product.productId} className={`${editingId === product.productId ? " border-b-0 divide-y-0": ""}`} >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {editingId === product.productId ? (
                       <input
@@ -318,7 +318,7 @@ const Product = () => {
                   </td>
                   </tr>
                   {editingId === product.productId && (
-                    <tr className='border-t-0'>
+                    <tr className='border-t-0 '>
                       <td colSpan="5" className="px-6 py-4 text-sm text-gray-500">
                         <textarea
                           className="w-full border rounded px-2 py-1"
