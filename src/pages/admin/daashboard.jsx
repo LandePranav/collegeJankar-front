@@ -7,6 +7,7 @@ import Sidebar from '../../components/admin/sidebar';
 const DashboardPage = () => {
     const { sellerId } = useParams();
     const navigate = useNavigate();
+    const [role, setRole] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
@@ -24,6 +25,10 @@ const DashboardPage = () => {
     }, []);
 
     useEffect(() => {
+        const role = sessionStorage.getItem('role');
+        // if(role !== 'admin'){
+        //     navigate("/login");    //rediredct if not admin
+        // }
         const verifySeller = async () => {
             if (!sellerId) {
                 navigate('/seller/login');

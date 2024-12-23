@@ -157,10 +157,29 @@ const CartItems = () => {
   
 
   const calculateTotal = () => {
-    const subtotal = cartItems.reduce((total, item) => {
-      return total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * item.quantity);
-    }, 0);
-    const discountedTotal = subtotal * (1 - (discountInfo.percentage / 100));
+    const subtotal = cartItems.reduce((total, item) => 
+      total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * (item.quantity || 1)), 
+      0).toFixed(2);
+  
+    let discountedTotal = subtotal;
+  
+    // Ensure discountPercentage is a valid number
+    let discountPercentage = parseFloat(discountInfo.percentage) || 0;
+  
+    // Apply 10% discount if subtotal is above ₹499
+    if (subtotal > 499) {
+      discountPercentage += 10; // Add 10% discount
+    }
+  
+    // Apply the discount
+    discountedTotal = subtotal * (1 - (discountPercentage / 100));
+    console.log("Discounted Total (before shipping):", discountedTotal); // Debugging
+  
+    // Add shipping cost if subtotal is less than ₹500
+    const shippingCost = subtotal < 500 ? 100 : 0;
+    discountedTotal += shippingCost;
+    console.log("Discounted Total (after shipping):", discountedTotal); // Debugging
+  
     return discountedTotal.toFixed(2);
   };
 
@@ -318,6 +337,14 @@ const CartItems = () => {
             </div>
           )}
           
+          {cartItems.reduce((total, item) => 
+            total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * (item.quantity || 1)), 
+            0) > 499 && (
+            <div className="text-sm text-green-600">
+              10% additional discount applied for orders above ₹499!
+            </div>
+          )}
+          
           <div className="space-y-2 text-sm">
             <div className="flex flex-col md:flex-row justify-between">
               <span>Subtotal</span>
@@ -325,6 +352,17 @@ const CartItems = () => {
                 total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * (item.quantity || 1)), 
                 0).toFixed(2)}</span>
             </div>
+            {cartItems.reduce((total, item) => 
+              total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * (item.quantity || 1)), 
+              0) > 499 && (
+              <div className="flex flex-col md:flex-row justify-between text-green-600">
+                <span>Free Delivery</span>
+                <span>Rs. 0</span>
+                <span>Discount: -{cartItems.reduce((total, item) => 
+                total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * (item.quantity || 1)), 
+                0).toFixed(2)/10} rs</span>
+              </div>
+            )}
             {discountInfo.percentage > 0 && (
               <div className="flex flex-col md:flex-row justify-between text-green-600">
                 <span>Discount ({discountInfo.percentage}%)</span>
@@ -333,10 +371,14 @@ const CartItems = () => {
                   0) * (discountInfo.percentage / 100)).toFixed(2)}</span>
               </div>
             )}
-            <div className="flex flex-col md:flex-row justify-between">
-              <span>Shipping</span>
-              <span>Rs. 0.00</span>
-            </div>
+            {cartItems.reduce((total, item) => 
+              total + (parseFloat(item.price.replace(/[^\d.]/g, '')) * (item.quantity || 1)), 
+              0) < 500 && (
+              <div className="flex flex-col md:flex-row justify-between">
+                <span>Shipping</span>
+                <span>Rs. 100</span>
+              </div>
+            )}
             <div className="flex flex-col md:flex-row justify-between font-bold text-base">
               <span>Total</span>
               <span>Rs. {calculateTotal()}</span>
