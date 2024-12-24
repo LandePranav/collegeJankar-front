@@ -19,7 +19,7 @@ const Order = () => {
       }
 
       try {
-        const response = await fetch(`https://ecommercebackend-8gx8.onrender.com/find-my-order`, {
+        const response = await fetch(`${process.env.SERVER_URI}/find-my-order`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ const Order = () => {
 
   const fetchProductDetails = async (productId) => {
     try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/:productId', {
+      const response = await fetch(`${process.env.SERVER_URI}/:productId`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

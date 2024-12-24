@@ -26,7 +26,7 @@ const CartItems = () => {
 
       try {
         // First fetch cart data
-        const cartResponse = await fetch(`https://ecommercebackend-8gx8.onrender.com/cart/get-cart`, {
+        const cartResponse = await fetch(`${process.env.SERVER_URI}/cart/get-cart`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ const CartItems = () => {
 
         // Get product details for each unique product
         const productPromises = uniqueProductIds.map(async (productId) => {
-          const productResponse = await fetch('https://ecommercebackend-8gx8.onrender.com/:productId', {
+          const productResponse = await fetch(`${process.env.SERVER_URI}/:productId`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ const CartItems = () => {
   
       try {
         const userId = sessionStorage.getItem('userId');
-        const response = await fetch('https://ecommercebackend-8gx8.onrender.com/cart/update-quantity', {
+        const response = await fetch(`${process.env.SERVER_URI}/cart/update-quantity`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -133,7 +133,7 @@ const CartItems = () => {
   
     try {
       const userId = sessionStorage.getItem('userId');
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/cart/delete-items', {
+      const response = await fetch(`${process.env.SERVER_URI}/cart/delete-items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -185,7 +185,7 @@ const CartItems = () => {
 
   const handleVoucherRedeem = async () => {
     try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/coupon/verify-coupon', {
+      const response = await fetch(`${process.env.SERVER_URI}/coupon/verify-coupon`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

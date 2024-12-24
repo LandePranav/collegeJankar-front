@@ -42,7 +42,7 @@ const ProfessionalNavbar = () => {
 
       try {
         const cartResponse = await fetch(
-          `https://ecommercebackend-8gx8.onrender.com/cart/get-cart`, {
+          `${process.env.SERVER_URI}/cart/get-cart`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ const ProfessionalNavbar = () => {
       if (userId) {
         try {
           const response = await fetch(
-            `https://ecommercebackend-8gx8.onrender.com/auth/user/${userId}`
+            `${process.env.SERVER_URI}/auth/user/${userId}`
           );
           const data = await response.json();
           setUserName(data.name);
