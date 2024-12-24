@@ -19,7 +19,7 @@ const Order = () => {
       }
 
       try {
-        const response = await fetch(`${process.env.SERVER_URI}/find-my-order`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/find-my-order`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ const Order = () => {
 
   const fetchProductDetails = async (productId) => {
     try {
-      const response = await fetch(`${process.env.SERVER_URI}/:productId`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/:productId`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

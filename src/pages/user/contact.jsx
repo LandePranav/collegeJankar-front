@@ -20,7 +20,7 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.SERVER_URI}/complaints/post-complaints`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/complaints/post-complaints`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

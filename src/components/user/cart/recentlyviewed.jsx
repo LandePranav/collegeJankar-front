@@ -16,7 +16,7 @@ const RecentlyViewed = () => {
       }
 
       const productPromises = recentlyViewedProducts.map(async (element) => {
-        const response = await fetch(`${process.env.SERVER_URI}/product/` + element);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/product/` + element);
         const productDetail = await response.json();
         return productDetail.product;
       });

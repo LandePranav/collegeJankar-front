@@ -99,7 +99,7 @@ const Orders = () => {
       }
 
       try {
-        const response = await fetch(`${process.env.SERVER_URI}/admin/verify-seller`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/admin/verify-seller`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -127,7 +127,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`${process.env.SERVER_URI}/get-orders`);
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/get-orders`);
       const data = await response.json();
       const ordersWithStatus = data.orders.map(order => ({
         ...order,

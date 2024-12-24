@@ -44,7 +44,7 @@ const Shop = ({ category }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${process.env.SERVER_URI}/get-product`);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/get-product`);
         const data = await response.json();
         if (data.success) {
           const validProducts = data.products.filter(
