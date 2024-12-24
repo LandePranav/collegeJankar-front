@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   // Axios instance with default configurations
   const api = axios.create({
     // baseURL: 'https://ecommercebackend-8gx8.onrender.com', // Backend URL
-    baseURL: 'http://localhost:5000',
+    baseURL: process.env.SERVER_URI,
     withCredentials: true, // Include cookies in requests
   });
 

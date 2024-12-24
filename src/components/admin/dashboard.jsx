@@ -22,7 +22,7 @@ const Dashboard = () => {
             const response = await fetch(
                 // "https://ecommercebackend-8gx8.onrender.com/get-orders"
 
-                "http://localhost:5000/get-orders"
+                `${process.env.SERVER_URI}/get-orders`
                 );
             if (!response.ok) {
                 throw new Error('Failed to fetch orders');

@@ -36,7 +36,7 @@ const Product = () => {
 
 
       try {
-        const response = await fetch('http://localhost:5000/admin/verify-seller', {
+        const response = await fetch(`${process.env.SERVER_URI}/admin/verify-seller`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ const Product = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/get-product');
+      const response = await fetch(`${process.env.SERVER_URI}/get-product`);
       const data = await response.json();
       setProducts(data.products); // Access the products array from response
     } catch (error) {
@@ -86,7 +86,7 @@ const Product = () => {
 
   const handleSave = async (productId) => {
     try {
-      const response = await fetch('http://localhost:5000/instock-update', {
+      const response = await fetch(`${process.env.SERVER_URI}/instock-update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ const Product = () => {
   const handleDelete = async (productKey) => {
     try {
       console.log(productKey);
-      const res = await axios.post('http://localhost:5000/delete-product', {productKey:productKey});
+      const res = await axios.post(`${process.env.SERVER_URI}/delete-product`, {productKey:productKey});
       if(res){
         if(res.data.success === true){ 
           alert("Product Deleted");

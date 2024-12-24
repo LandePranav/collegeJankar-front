@@ -36,7 +36,7 @@ const DashboardPage = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/admin/verify-seller', {
+                const response = await fetch(`${process.env.SERVER_URI}/admin/verify-seller`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

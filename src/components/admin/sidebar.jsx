@@ -77,7 +77,7 @@ const Sidebar = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('http://localhost:5000/admin/logout', {
+            const response = await fetch(`${process.env.SERVER_URI}/admin/logout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ const Sidebar = () => {
             )
             const imageText = imageTexts.join(' ');
             const updatedProductData = {...productData, img:imageText, description:description};
-            const response = await fetch('http://localhost:5000/create-product', {
+            const response = await fetch(`${process.env.SERVER_URI}/create-product`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

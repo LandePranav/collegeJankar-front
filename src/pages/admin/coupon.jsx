@@ -25,7 +25,7 @@ const CouponPage = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/admin/verify-seller', {
+        const response = await fetch(`${process.env.SERVER_URI}/admin/verify-seller`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -53,7 +53,7 @@ const CouponPage = () => {
 
   const fetchCoupons = async () => {
     try {
-      const response = await fetch('http://localhost:5000/coupon/get-coupon');
+      const response = await fetch(`${process.env.SERVER_URI}/coupon/get-coupon`);
       const data = await response.json();
       if (data.success) {
         setCoupons(data.coupons);
@@ -82,7 +82,7 @@ const CouponPage = () => {
 
   const handleDeleteCoupon = async (code, discountPercentage) => {
     try {
-      const response = await fetch('http://localhost:5000/coupon/delete-coupon', {
+      const response = await fetch(`${process.env.SERVER_URI}/coupon/delete-coupon`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ const CouponPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/coupon/save-coupon', {
+      const response = await fetch(`${process.env.SERVER_URI}/coupon/save-coupon`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

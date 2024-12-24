@@ -45,7 +45,7 @@ const AdminSignup = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/admin/seller/signup', {
+      const response = await fetch(`${process.env.SERVER_URI}/admin/seller/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ const AdminSignup = () => {
     if (resendDisabled) return;
     
     try {
-      const response = await fetch('http://localhost:5000/seller/send-otp', {
+      const response = await fetch(`${process.env.SERVER_URI}/seller/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ const AdminSignup = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/seller/verify-otp', {
+      const response = await fetch(`${process.env.SERVER_URI}/seller/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

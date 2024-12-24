@@ -23,7 +23,7 @@ const AdminLogin = () => {
     try {
       const response = await fetch(
         // "https://ecommercebackend-8gx8.onrender.com/admin/login",
-        "http://localhost:5000/admin/login",
+        `${process.env.SERVER_URI}/admin/login`,
         {
           method: "POST",
           credentials: "include",
